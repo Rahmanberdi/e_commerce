@@ -20,7 +20,6 @@ class HomeView(generic.ListView):
     extra_context = {
         'category':'All'
     }
-    paginate_by = 10
     context_object_name = 'items'
     template_name = 'home.html'
 
