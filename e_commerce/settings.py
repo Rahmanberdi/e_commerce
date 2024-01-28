@@ -23,7 +23,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-py*n7(__rh4f4os6w&sg+ccyz05tt!vbug%a7-!r=4nny-w9(d'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
@@ -38,6 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'whitenoise.runserver_nostatic',
+
     #authentication
     'allauth',
     'allauth.account',
@@ -143,10 +145,10 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
 STATIC_URL = 'static/'
-STATICFILES_DIRS = [BASE_DIR/'static']
 STATIC_ROOT = BASE_DIR / 'staticfiles'
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR,"media")
+STATICFILES_STORAGE="whitenoise.storage.CompressedManifestStaticFilesStorage"#add this line
+MEDIA_URL = '/images/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'static/images')
 LOGOUT_REDIRECT_URL = 'core:home'
 LOGIN_REDIRECT_URL = 'core:home'
 SIGNUP_REDIRECT_URL = 'allauth:accounts_login'
@@ -202,4 +204,12 @@ JAZZMIN_UI_TWEAKS = {
     },
     "actions_sticky_top": True
 }
+
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
+SECURE_SSL_REDIRECT = False
+CORS_ALLOW_ALL_ORIGINS = True
+CSRF_TRUSTED_ORIGINS = ['https://ecommerce-production-6b86.up.railway.app']
+
+
 
