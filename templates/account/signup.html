@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% load allauth i18n %}
+{% load crispy_forms_tags %}
+{% block head_title %}
+    {% trans "Signup" %}
+{% endblock head_title %}
+{% block content %}
+    <main>
+    <div class="container">
+        <section>
+            <div class="mb-4">
+                <div class="row wow fade-in">
+                    <div class="col-6 offset-3">
+                        {% element h1 %}
+                            {% trans "Sign Up" %}
+                        {% endelement %}
+                        <p>
+                            {% blocktrans %}Already have an account? Then please <a href="{{ login_url }}">sign in</a>.{% endblocktrans %}
+                        </p>
+                        {% url 'account_signup' as action_url %}
+                        <form method="post" class="signup" action="{% url 'account_signup' %}">
+                            {% csrf_token %}
+                            {{ form|crispy }}
+                            {% if redirect_field_value %}
+                                <input type="hidden"
+                                       name="{{ redirect_field_name }}"
+                                       value="{{ redirect_field_value }}" />
+                            {% endif %}
+
+                            <button class="btn btn-primary ms-1" type="submit">{% trans "Sign Up" %}</button>
+                        </form>
+                        {% if SOCIALACCOUNT_ENABLED %}
+                            {% include "socialaccount/snippets/login.html" with page_layout="entrance" %}
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+    </main>
+
+
+{% endblock content %}

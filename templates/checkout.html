@@ -1,0 +1,150 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load i18n %}
+{% load crispy_forms_tags %}
+{% load cart_template_tags %}
+{% block content %}
+<!--Main layout-->
+<main >
+    <div class="container">
+        <!-- Heading -->
+        <h2 class="my-5 text-center">{% trans 'Checkout form' %}</h2>
+
+        <!--Grid row-->
+        <div class="row">
+            <!--Grid column-->
+            <div class="col-md-8 mb-4">
+                <!--Card-->
+
+                <form method="post" class="card p-4">
+                    {% csrf_token %}
+                    <!--address-->
+                    <p class="mb-0">
+                        {% trans 'Name' %}
+                    </p>
+                    <div class="form-outline mb-4" data-mdb-input-init>
+                        {{ form.surname }}
+                    </div>
+
+                    <p class="mb-0">
+                        {% trans 'Surname' %}
+                    </p>
+                    <div class="form-outline mb-4" data-mdb-input-init>
+                        {{ form.name }}
+                    </div>
+                    <p class="mb-0">
+                        {% trans 'Phone number' %}
+                    </p>
+                    <div class="form-outline mb-4" data-mdb-input-init>
+                        {{ form.phonenumber }}
+                    </div>
+                    <p class="mb-0">
+                        {% trans 'City Address' %}
+                    </p>
+                    <div class="form-outline mb-4" data-mdb-input-init>
+                        {{ form.street_address }}
+                    </div>
+
+                    <!--address-2-->
+                    <p class="mb-0">
+                        {% trans 'Street and Apartment address' %}
+                    </p>
+                    <div class="form-outline mb-4" data-mdb-input-init>
+                        {{ form.apartment_address }}
+                    </div>
+
+                    <!--Grid row-->
+                    <div class="row">
+                        <!--Grid column-->
+                        <div class="col-lg-4 col-md-12 mb-4">
+                            <p class="mb-0">
+                                {% trans 'Country' %}
+                            </p>
+                            <div class="form-outline mb-4" >
+                                {{ form.country }}
+                            </div>
+                        </div>
+                        <!--Grid column-->
+
+
+                        <!--Grid column-->
+                        <div class="col-lg-4 col-md-12 mb-4">
+                            <p class="mb-0">
+                                {% trans 'Velayat' %}
+                            </p>
+                            <div class="form-outline mb-4" data-mdb-input-init>
+                                {{ form.velayat }}
+                            </div>
+                        </div>
+                        <!--Grid column-->
+                    </div>
+                    <!--Grid row-->
+
+                    <hr />
+                    <div class="form-check">
+                        <input {% if form.save_info.value %}checked{% endif %} class="form-check-input" type="checkbox" value="" id="flexCheckDefault" />
+                        <label class="form-check-label" for="flexCheckDefault">{% trans 'Save this information for next time' %}</label>
+                    </div>
+                    <hr class="mb-4" />
+                  <button class="btn btn-primary" type="submit">{% trans 'Continue to checkout' %}</button>
+                </form>
+                <!--/.Card-->
+            </div>
+            <!--Grid column-->
+
+            <!--Grid column-->
+            <div class="col-md-4 mb-4">
+                <!-- Heading -->
+                <h4 class="d-flex justify-content-between align-items-center mb-3">
+                    <span class="text-muted">{% trans 'Your cart' %}</span>
+                    <span class="badge rounded-pill badge-primary">{{ order.items.count}}</span>
+                </h4>
+
+                <!-- Cart -->
+                <ul class="list-group mb-3">
+                    {% for order_item in order.items.all %}
+                        <li class="list-group-item d-flex justify-content-between">
+                        <div>
+                            <h6 class="my-0">{{ order_item.quantity }} x {{ order_item.item.title }}</h6>
+                            <small class="text-muted">{{ order_item.item.description|truncatechars:20}}</small>
+                        </div>
+                        <span class="text-muted">{{ order_item.get_total_price|multiply|floatformat:2 }} TMT</span>
+                        </li>
+
+                    {% endfor %}
+
+                    {% if order.coupon %}
+                        <li class="list-group-item d-flex justify-content-between bg-light">
+                            <div class="text-success">
+                                <h6 class="my-0">{% trans 'Promo code' %}</h6>
+                                <small>{{ order.coupon.code }}</small>
+                            </div>
+                            <span class="text-success">-{{ order.coupon.amount|multiply|floatformat:2 }} TMT</span>
+                        </li>
+                    {% endif %}
+                    <li class="list-group-item d-flex justify-content-between">
+                        <span>{% trans 'Total (TMT)' %}</span>
+                        <strong>{{ order.total_amount|multiply|floatformat:2 }} TMT</strong>
+                    </li>
+                </ul>
+                <!-- Cart -->
+
+                <!-- Promo code -->
+                <form class="card p-2" method="post">
+                    {% csrf_token %}
+                    <div class="input-group mb-3">
+                        {{ coupon_form.coupon }}
+                        <button class="btn btn-primary" type="submit" id="button-addon2" data-mdb-ripple-color="dark">
+                            {% trans 'Redeem' %}
+                    </button>
+                    </div>
+                </form>
+                <!-- Promo code -->
+            </div>
+            <!--Grid column-->
+        </div>
+        <!--Grid row-->
+    </div>
+</main>
+<!--Main layout-->
+{% endblock %}
